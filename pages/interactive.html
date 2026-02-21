@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактив — Лазерные Технологии</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .anim-container {
+            margin: 2rem 0;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-glass);
+        }
+        .anim-container canvas {
+            display: block;
+            width: 100%;
+            cursor: crosshair;
+        }
+        .anim-header {
+            padding: 1.5rem 2rem 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .anim-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+        .anim-badge {
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            font-family: var(--font-display);
+            font-weight: 600;
+            border: 1px solid var(--primary);
+            border-radius: 50px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .diagram-card {
+            padding: 2rem;
+            text-align: center;
+        }
+        .diagram-card svg {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        .diagram-card h4 {
+            font-family: var(--font-display);
+            color: var(--text-bright);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        .diagram-card p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .rotate-card {
+            transition: transform 0.1s ease;
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="laser-beam laser-beam-1"></div>
+    <div class="laser-beam laser-beam-2"></div>
+    <div class="particles" id="particles"></div>
+
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">◈</span>
+                <span class="logo-text">LASER<span class="accent">TECH</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../index.html">Главная</a></li>
+                <li><a href="theory.html">Теория</a></li>
+                <li><a href="types.html">Типы лазеров</a></li>
+                <li><a href="applications.html">Применение</a></li>
+                <li><a href="history.html">История</a></li>
+                <li><a href="safety.html">Безопасность</a></li>
+                <li><a href="interactive.html" class="active">Интерактив</a></li>
+            </ul>
+            <div class="burger" id="burger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <h1 class="glitch" data-text="ИНТЕРАКТИВ">ИНТЕРАКТИВ</h1>
+        <p class="page-subtitle">Интерактивные анимации и схемы работы лазера</p>
+    </section>
+
+    <section class="section">
+        <div class="container">
+
+            <!-- Laser Beam Simulator -->
+            <div class="anim-container fade-in">
+                <div class="anim-header">
+                    <h3>Симулятор лазерного луча</h3>
+                    <span class="anim-badge">Интерактивно</span>
+                </div>
+                <canvas id="laserBeamCanvas"></canvas>
+            </div>
+
+            <div class="article-block glass-card fade-in">
+                <p>Лазерный луч обладает малой расходимостью благодаря высокой пространственной когерентности. Управляйте лучом мышью — фотоны движутся строго в заданном направлении. Нажмите для генерации импульса повышенной мощности.</p>
+            </div>
+
+            <!-- Stimulated Emission -->
+            <div class="anim-container fade-in">
+                <div class="anim-header">
+                    <h3>Вынужденное излучение</h3>
+                    <span class="anim-badge">Кликайте</span>
+                </div>
+                <canvas id="stimulatedEmissionCanvas"></canvas>
+            </div>
+
+            <div class="article-block glass-card fade-in">
+                <p>Визуализация процесса вынужденного излучения. Оранжевые атомы находятся в возбуждённом состоянии (уровень E₂). Когда фотон пролетает рядом с возбуждённым атомом, тот переходит на нижний уровень E₁ и испускает идентичный фотон — той же частоты, фазы и направления. Атомы постоянно «накачиваются» обратно в возбуждённое состояние.</p>
+            </div>
+
+            <!-- Optical Resonator -->
+            <div class="anim-container fade-in">
+                <div class="anim-header">
+                    <h3>Оптический резонатор</h3>
+                    <span class="anim-badge">Кликайте</span>
+                </div>
+                <canvas id="resonatorCanvas"></canvas>
+            </div>
+
+            <div class="article-block glass-card fade-in">
+                <p>Модель резонатора Фабри — Перо. Фотоны многократно отражаются между зеркалами, проходя через активную среду (фиолетовая зона) и усиливаясь. Левое зеркало полностью отражающее (R=100%), правое — полупрозрачное (R≈85%), через него выходит лазерное излучение. Амплитуда волнового пакета растёт при каждом проходе через активную среду.</p>
+            </div>
+
+            <!-- Energy Level Diagram -->
+            <div class="anim-container fade-in">
+                <div class="anim-header">
+                    <h3>Энергетические уровни</h3>
+                    <span class="anim-badge">Кликайте</span>
+                </div>
+                <canvas id="energyLevelCanvas"></canvas>
+            </div>
+
+            <div class="article-block glass-card fade-in">
+                <p>Трёхуровневая схема генерации. При накачке электроны переходят с основного уровня E₁ на уровень накачки E₃, затем быстро безызлучательно релаксируют на метастабильный уровень E₂. Между E₂ и E₁ происходит лазерный переход с испусканием фотона. Нажмите для «накачки» всех электронов.</p>
+            </div>
+
+            <!-- SVG Diagrams -->
+            <h2 class="section-title" style="margin-top: 3rem;">Схемы устройства лазеров</h2>
+
+            <div class="diagram-grid">
+
+                <div class="glass-card diagram-card rotate-card fade-in">
+                    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- He-Ne laser diagram -->
+                        <defs>
+                            <linearGradient id="tubeGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#1a0a2e" />
+                                <stop offset="50%" stop-color="#2d1b4e" />
+                                <stop offset="100%" stop-color="#1a0a2e" />
+                            </linearGradient>
+                            <linearGradient id="glowGrad" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#ff000000" />
+                                <stop offset="50%" stop-color="#ff330066" />
+                                <stop offset="100%" stop-color="#ff000000" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Tube -->
+                        <rect x="60" y="70" width="280" height="60" rx="8" fill="url(#tubeGrad)" stroke="#7b2fff44" stroke-width="1"/>
+                        <!-- Gas glow -->
+                        <rect x="65" y="75" width="270" height="50" rx="5" fill="url(#glowGrad)">
+                            <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+                        </rect>
+                        <!-- Left mirror -->
+                        <rect x="40" y="60" width="20" height="80" rx="3" fill="#445" stroke="#88aacc" stroke-width="1"/>
+                        <text x="50" y="155" text-anchor="middle" fill="#88aacc" font-size="9" font-family="Orbitron">R=100%</text>
+                        <!-- Right mirror -->
+                        <rect x="340" y="60" width="20" height="80" rx="3" fill="#44455566" stroke="#88aacc66" stroke-width="1"/>
+                        <text x="350" y="155" text-anchor="middle" fill="#88aacc" font-size="9" font-family="Orbitron">R≈99%</text>
+                        <!-- Output beam -->
+                        <line x1="360" y1="100" x2="395" y2="100" stroke="#ff3333" stroke-width="3">
+                            <animate attributeName="opacity" values="0.5;1;0.5" dur="0.5s" repeatCount="indefinite"/>
+                        </line>
+                        <!-- Electrodes -->
+                        <rect x="120" y="58" width="30" height="12" rx="2" fill="#666" stroke="#aaa" stroke-width="0.5"/>
+                        <text x="135" y="54" text-anchor="middle" fill="#aaa" font-size="8">Анод</text>
+                        <rect x="250" y="130" width="30" height="12" rx="2" fill="#666" stroke="#aaa" stroke-width="0.5"/>
+                        <text x="265" y="155" text-anchor="middle" fill="#aaa" font-size="8">Катод</text>
+                        <!-- HV -->
+                        <line x1="135" y1="58" x2="135" y2="40" stroke="#ff444488" stroke-width="1"/>
+                        <line x1="265" y1="142" x2="265" y2="165" stroke="#ff444488" stroke-width="1"/>
+                        <text x="200" y="20" text-anchor="middle" fill="#ff4488" font-size="10" font-family="Orbitron">He-Ne ЛАЗЕР</text>
+                        <text x="200" y="190" text-anchor="middle" fill="#ffffff44" font-size="8">λ = 632.8 нм</text>
+                    </svg>
+                    <h4>Гелий-неоновый лазер</h4>
+                    <p>Газоразрядная трубка с зеркалами. Электрический разряд возбуждает атомы гелия, которые передают энергию атомам неона. Генерация на 632,8 нм.</p>
+                </div>
+
+                <div class="glass-card diagram-card rotate-card fade-in">
+                    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Solid-state laser -->
+                        <defs>
+                            <linearGradient id="crystalGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#ff2244" />
+                                <stop offset="50%" stop-color="#cc1133" />
+                                <stop offset="100%" stop-color="#ff2244" />
+                            </linearGradient>
+                            <radialGradient id="flashGrad">
+                                <stop offset="0%" stop-color="#ffff0066" />
+                                <stop offset="100%" stop-color="#ffff0000" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Flash lamp (spiral) -->
+                        <ellipse cx="200" cy="100" rx="100" ry="55" fill="none" stroke="#ffcc0044" stroke-width="12" stroke-dasharray="8 4">
+                            <animate attributeName="stroke-opacity" values="0.2;0.6;0.2" dur="1.5s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <!-- Flash glow -->
+                        <ellipse cx="200" cy="100" rx="105" ry="60" fill="url(#flashGrad)">
+                            <animate attributeName="opacity" values="0;0.4;0" dur="1.5s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <!-- Crystal rod -->
+                        <rect x="110" y="85" width="180" height="30" rx="15" fill="url(#crystalGrad)" opacity="0.8"/>
+                        <rect x="110" y="85" width="180" height="30" rx="15" fill="none" stroke="#ff667788" stroke-width="1"/>
+                        <!-- Left mirror -->
+                        <rect x="90" y="78" width="20" height="44" rx="3" fill="#445" stroke="#88aacc" stroke-width="1"/>
+                        <!-- Right mirror -->
+                        <rect x="290" y="78" width="20" height="44" rx="3" fill="#44455566" stroke="#88aacc66" stroke-width="1"/>
+                        <!-- Output -->
+                        <line x1="310" y1="100" x2="380" y2="100" stroke="#ff3333" stroke-width="3">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="0.8s" repeatCount="indefinite"/>
+                        </line>
+                        <text x="200" y="20" text-anchor="middle" fill="#ff4488" font-size="10" font-family="Orbitron">РУБИНОВЫЙ ЛАЗЕР</text>
+                        <text x="200" y="40" text-anchor="middle" fill="#ffffff44" font-size="8">Al₂O₃:Cr³⁺</text>
+                        <text x="50" y="104" text-anchor="middle" fill="#88aacc" font-size="8">R=100%</text>
+                        <text x="350" y="140" text-anchor="middle" fill="#88aacc" font-size="8">Выход</text>
+                        <text x="200" y="75" text-anchor="middle" fill="#ffcc00aa" font-size="8">Импульсная лампа</text>
+                        <text x="200" y="190" text-anchor="middle" fill="#ffffff44" font-size="8">λ = 694.3 нм</text>
+                    </svg>
+                    <h4>Рубиновый лазер</h4>
+                    <p>Кристалл рубина (Al₂O₃:Cr³⁺) окружён спиральной импульсной лампой для оптической накачки. Первый лазер, 1960 год.</p>
+                </div>
+
+                <div class="glass-card diagram-card rotate-card fade-in">
+                    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Semiconductor laser -->
+                        <defs>
+                            <linearGradient id="pnGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#2244aa" />
+                                <stop offset="48%" stop-color="#2244aa" />
+                                <stop offset="48%" stop-color="#00f0ff33" />
+                                <stop offset="52%" stop-color="#00f0ff33" />
+                                <stop offset="52%" stop-color="#aa2244" />
+                                <stop offset="100%" stop-color="#aa2244" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Chip body -->
+                        <rect x="120" y="50" width="160" height="100" rx="4" fill="url(#pnGrad)" stroke="#ffffff22" stroke-width="1"/>
+                        <!-- Active layer glow -->
+                        <rect x="120" y="96" width="160" height="8" fill="#00f0ff22">
+                            <animate attributeName="fill" values="#00f0ff11;#00f0ff44;#00f0ff11" dur="1s" repeatCount="indefinite"/>
+                        </rect>
+                        <!-- Labels -->
+                        <text x="200" y="80" text-anchor="middle" fill="#88aaff" font-size="12" font-family="Orbitron">n-тип</text>
+                        <text x="200" y="135" text-anchor="middle" fill="#ff8888" font-size="12" font-family="Orbitron">p-тип</text>
+                        <text x="200" y="105" text-anchor="middle" fill="#00f0ff" font-size="8" font-family="Orbitron">Активный слой</text>
+                        <!-- Contacts -->
+                        <rect x="160" y="38" width="80" height="12" rx="2" fill="#888" stroke="#aaa" stroke-width="0.5"/>
+                        <rect x="160" y="150" width="80" height="12" rx="2" fill="#888" stroke="#aaa" stroke-width="0.5"/>
+                        <!-- Current flow -->
+                        <text x="100" y="44" text-anchor="middle" fill="#aaa" font-size="8">−</text>
+                        <text x="100" y="160" text-anchor="middle" fill="#aaa" font-size="8">+</text>
+                        <line x1="100" y1="46" x2="100" y2="155" stroke="#ffcc0044" stroke-width="1" stroke-dasharray="4 3">
+                            <animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1s" repeatCount="indefinite"/>
+                        </line>
+                        <!-- Output beam -->
+                        <line x1="280" y1="100" x2="380" y2="100" stroke="#00f0ff" stroke-width="3">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="0.6s" repeatCount="indefinite"/>
+                        </line>
+                        <text x="345" y="90" text-anchor="middle" fill="#00f0ff88" font-size="8">Луч</text>
+                        <!-- Facets -->
+                        <line x1="120" y1="92" x2="120" y2="108" stroke="#88aacc" stroke-width="2"/>
+                        <line x1="280" y1="92" x2="280" y2="108" stroke="#88aacc88" stroke-width="2"/>
+                        <text x="200" y="20" text-anchor="middle" fill="#00f0ff" font-size="10" font-family="Orbitron">ПОЛУПРОВОДНИКОВЫЙ ЛАЗЕР</text>
+                        <text x="200" y="185" text-anchor="middle" fill="#ffffff44" font-size="8">GaAs, InGaAs — λ от 405 до 1550 нм</text>
+                    </svg>
+                    <h4>Полупроводниковый лазер</h4>
+                    <p>p-n гетероструктура с активным слоем. Инжекция тока создаёт инверсию населённостей. Торцы кристалла — зеркала резонатора.</p>
+                </div>
+
+                <div class="glass-card diagram-card rotate-card fade-in">
+                    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- CO2 laser -->
+                        <defs>
+                            <linearGradient id="co2Glow" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#ff000000" />
+                                <stop offset="50%" stop-color="#7b2fff22" />
+                                <stop offset="100%" stop-color="#ff000000" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Main tube -->
+                        <rect x="40" y="80" width="320" height="40" rx="20" fill="#0a0a20" stroke="#7b2fff44" stroke-width="1"/>
+                        <rect x="45" y="85" width="310" height="30" rx="15" fill="url(#co2Glow)">
+                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/>
+                        </rect>
+                        <!-- Mirrors -->
+                        <rect x="20" y="72" width="20" height="56" rx="3" fill="#445" stroke="#88aacc" stroke-width="1"/>
+                        <rect x="360" y="72" width="20" height="56" rx="3" fill="#44455566" stroke="#88aacc66" stroke-width="1"/>
+                        <!-- Gas ports -->
+                        <line x1="120" y1="80" x2="120" y2="55" stroke="#44ff88" stroke-width="2"/>
+                        <text x="120" y="50" text-anchor="middle" fill="#44ff88" font-size="7">CO₂+N₂+He</text>
+                        <line x1="280" y1="120" x2="280" y2="145" stroke="#ff888888" stroke-width="2"/>
+                        <text x="280" y="158" text-anchor="middle" fill="#ff888888" font-size="7">Выход газа</text>
+                        <!-- Cooling -->
+                        <rect x="160" y="125" width="80" height="15" rx="3" fill="none" stroke="#4488ff44" stroke-width="1"/>
+                        <text x="200" y="136" text-anchor="middle" fill="#4488ff66" font-size="7">Охлаждение</text>
+                        <!-- Output -->
+                        <line x1="380" y1="100" x2="398" y2="100" stroke="#ff4444" stroke-width="4" opacity="0.5">
+                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.4s" repeatCount="indefinite"/>
+                        </line>
+                        <text x="200" y="20" text-anchor="middle" fill="#7b2fff" font-size="10" font-family="Orbitron">CO₂ ЛАЗЕР</text>
+                        <text x="200" y="185" text-anchor="middle" fill="#ffffff44" font-size="8">λ = 10.6 мкм • КПД до 30% • до десятков кВт</text>
+                    </svg>
+                    <h4>CO₂-лазер</h4>
+                    <p>Проточная система с газовой смесью CO₂ + N₂ + He. Генерация в среднем ИК (10,6 мкм). Высочайший КПД среди газовых лазеров.</p>
+                </div>
+
+                <div class="glass-card diagram-card rotate-card fade-in">
+                    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Fiber laser -->
+                        <defs>
+                            <linearGradient id="fiberCore" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#00f0ff00"/>
+                                <stop offset="30%" stop-color="#00f0ff44"/>
+                                <stop offset="70%" stop-color="#00f0ff44"/>
+                                <stop offset="100%" stop-color="#00f0ff00"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Fiber path -->
+                        <path d="M 50 100 Q 100 50, 150 100 Q 200 150, 250 100 Q 300 50, 350 100" fill="none" stroke="#ffffff22" stroke-width="12" stroke-linecap="round"/>
+                        <path d="M 50 100 Q 100 50, 150 100 Q 200 150, 250 100 Q 300 50, 350 100" fill="none" stroke="url(#fiberCore)" stroke-width="4" stroke-linecap="round">
+                            <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/>
+                            <animate attributeName="stroke-dasharray" values="10 20;20 10;10 20" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                        <!-- Pump diode -->
+                        <rect x="10" y="85" width="40" height="30" rx="4" fill="#aa224488" stroke="#ff4488" stroke-width="1"/>
+                        <text x="30" y="104" text-anchor="middle" fill="#ff4488" font-size="7" font-family="Orbitron">ДИОД</text>
+                        <text x="30" y="128" text-anchor="middle" fill="#ff448888" font-size="7">976 нм</text>
+                        <!-- Bragg gratings -->
+                        <g transform="translate(70,88)">
+                            <line x1="0" y1="0" x2="0" y2="24" stroke="#ffcc00" stroke-width="1"/>
+                            <line x1="4" y1="0" x2="4" y2="24" stroke="#ffcc00" stroke-width="1"/>
+                            <line x1="8" y1="0" x2="8" y2="24" stroke="#ffcc00" stroke-width="1"/>
+                            <line x1="12" y1="0" x2="12" y2="24" stroke="#ffcc00" stroke-width="1"/>
+                        </g>
+                        <text x="76" y="82" text-anchor="middle" fill="#ffcc00aa" font-size="7">FBG</text>
+                        <g transform="translate(330,88)">
+                            <line x1="0" y1="0" x2="0" y2="24" stroke="#ffcc0088" stroke-width="1"/>
+                            <line x1="4" y1="0" x2="4" y2="24" stroke="#ffcc0088" stroke-width="1"/>
+                            <line x1="8" y1="0" x2="8" y2="24" stroke="#ffcc0088" stroke-width="1"/>
+                        </g>
+                        <text x="334" y="82" text-anchor="middle" fill="#ffcc0088" font-size="7">FBG</text>
+                        <!-- Output -->
+                        <line x1="355" y1="100" x2="395" y2="100" stroke="#00f0ff" stroke-width="3">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="0.6s" repeatCount="indefinite"/>
+                        </line>
+                        <text x="200" y="20" text-anchor="middle" fill="#ffaa44" font-size="10" font-family="Orbitron">ВОЛОКОННЫЙ ЛАЗЕР</text>
+                        <text x="200" y="185" text-anchor="middle" fill="#ffffff44" font-size="8">Yb³⁺ или Er³⁺ • λ ≈ 1064–1550 нм • до десятков кВт</text>
+                    </svg>
+                    <h4>Волоконный лазер</h4>
+                    <p>Активное волокно с легированной сердцевиной. Накачка лазерным диодом. Брэгговские решётки (FBG) — зеркала резонатора.</p>
+                </div>
+
+                <div class="glass-card diagram-card rotate-card fade-in">
+                    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Generic: 3-level energy diagram -->
+                        <!-- Levels -->
+                        <line x1="60" y1="170" x2="220" y2="170" stroke="#4488ff" stroke-width="2"/>
+                        <line x1="60" y1="110" x2="220" y2="110" stroke="#ff8844" stroke-width="2"/>
+                        <line x1="60" y1="40" x2="220" y2="40" stroke="#ff4488" stroke-width="2"/>
+                        <!-- Labels -->
+                        <text x="50" y="174" text-anchor="end" fill="#4488ff" font-size="11" font-family="Orbitron">E₁</text>
+                        <text x="50" y="114" text-anchor="end" fill="#ff8844" font-size="11" font-family="Orbitron">E₂</text>
+                        <text x="50" y="44" text-anchor="end" fill="#ff4488" font-size="11" font-family="Orbitron">E₃</text>
+                        <!-- Pump arrow -->
+                        <line x1="240" y1="165" x2="240" y2="45" stroke="#ff4488" stroke-width="2" marker-end="url(#arrowPink)"/>
+                        <polygon points="240,45 235,55 245,55" fill="#ff4488"/>
+                        <text x="260" y="105" fill="#ff4488" font-size="9" font-family="Orbitron">Накачка</text>
+                        <!-- Non-radiative -->
+                        <line x1="280" y1="45" x2="280" y2="110" stroke="#ffffff44" stroke-width="1" stroke-dasharray="4 3"/>
+                        <polygon points="280,110 275,100 285,100" fill="#ffffff44"/>
+                        <text x="310" y="80" fill="#ffffff66" font-size="8">Безызл.</text>
+                        <!-- Laser transition -->
+                        <line x1="320" y1="110" x2="320" y2="165" stroke="#00f0ff" stroke-width="2"/>
+                        <polygon points="320,165 315,155 325,155" fill="#00f0ff"/>
+                        <!-- Wavy photon -->
+                        <path d="M325 137 Q330 132, 335 137 Q340 142, 345 137 Q350 132, 355 137 Q360 142, 365 137" fill="none" stroke="#00f0ff" stroke-width="1.5">
+                            <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+                        </path>
+                        <text x="345" y="130" fill="#00f0ff" font-size="8" font-family="Orbitron">hν (лазер)</text>
+                        <text x="345" y="155" fill="#00f0ff88" font-size="7">E₂→E₁</text>
+                        <text x="200" y="195" text-anchor="middle" fill="#ffffff44" font-size="8">Трёхуровневая схема генерации</text>
+                    </svg>
+                    <h4>Энергетическая диаграмма</h4>
+                    <p>Трёхуровневая схема: накачка E₁→E₃, быстрая релаксация E₃→E₂, лазерный переход E₂→E₁ с излучением фотона hν.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">LASER<span class="accent">TECH</span></span>
+                </div>
+                <div class="footer-links">
+                    <h4>Навигация</h4>
+                    <a href="../index.html">Главная</a>
+                    <a href="theory.html">Теория</a>
+                    <a href="types.html">Типы лазеров</a>
+                    <a href="applications.html">Применение</a>
+                    <a href="history.html">История</a>
+                    <a href="safety.html">Безопасность</a>
+                    <a href="interactive.html">Интерактив</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 LaserTech. Лазерные технологии и их использование.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+</body>
+</html>
