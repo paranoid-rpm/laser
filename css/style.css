@@ -22,6 +22,10 @@
     --section-pad: clamp(56px, 8vw, 90px);
     --gap: clamp(12px, 3vw, 24px);
 
+    /* Mobile wow tuning (used via media queries) */
+    --hero-glow: rgba(0, 240, 255, 0.32);
+    --hero-glow-strong: rgba(0, 240, 255, 0.45);
+
     --font-display: 'Orbitron', monospace;
     --font-body: 'Roboto', sans-serif;
     --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -170,7 +174,19 @@ a:hover { color: var(--text-bright); }
     position: relative;
 }
 
-.hero-content { max-width: 900px; }
+/* Soft spotlight behind hero (looks great on mobile) */
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(700px circle at 50% 22%, rgba(0,240,255,0.11), transparent 55%),
+        radial-gradient(500px circle at 50% 45%, rgba(123,47,255,0.08), transparent 60%);
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.hero-content { max-width: 900px; position: relative; }
 
 .hero h1 {
     font-family: var(--font-display);
@@ -179,7 +195,7 @@ a:hover { color: var(--text-bright); }
     letter-spacing: 0.05em;
     color: var(--text-bright);
     margin-bottom: clamp(0.7rem, 2vw, 1rem);
-    text-shadow: 0 0 40px var(--primary-dim);
+    text-shadow: 0 0 44px var(--hero-glow);
 }
 
 .hero-subtitle {
@@ -487,6 +503,19 @@ a:hover { color: var(--text-bright); }
     html { font-size: 14px; }
     /* Make tap targets larger and reduce hover-only effects */
     .hover-lift:hover { transform: none; box-shadow: none; }
+
+    /* Extra mobile wow: tighter tracking + stronger glow so headline pops */
+    .hero h1 {
+        letter-spacing: 0.03em;
+        text-shadow: 0 0 52px var(--hero-glow-strong);
+    }
+
+    /* Slightly dim background grid so text feels more contrasty */
+    .bg-grid {
+        background-image:
+            linear-gradient(rgba(0, 240, 255, 0.022) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 240, 255, 0.022) 1px, transparent 1px);
+    }
 }
 
 @media (hover: none) and (pointer: coarse) {
