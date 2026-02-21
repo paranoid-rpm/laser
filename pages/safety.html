@@ -9,6 +9,95 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .safety-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.5rem;
+            align-items: start;
+            margin: 1.5rem 0 2.5rem;
+        }
+        @media (max-width: 980px) {
+            .safety-grid { grid-template-columns: 1fr; }
+        }
+
+        .embed-anim {
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-glass);
+        }
+        .embed-anim .embed-head {
+            padding: 1.2rem 1.5rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .embed-anim .embed-head h3 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        .embed-anim .hint {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            color: #00f0ff88;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .embed-anim canvas { display:block; width:100%; cursor: crosshair; }
+
+        .safety-legend {
+            padding: 1.8rem;
+        }
+        .safety-legend h4 {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+        }
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 0.7rem 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 12px currentColor;
+        }
+        .dot.blue { color:#00f0ff; background:#00f0ff; }
+        .dot.orange { color:#ff8844; background:#ff8844; }
+        .dot.red { color:#ff2d75; background:#ff2d75; }
+
+        .callout {
+            padding: 1.2rem 1.5rem;
+            margin-top: 1.2rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 45, 117, 0.25);
+            background: rgba(255, 45, 117, 0.06);
+            color: rgba(255,255,255,0.85);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .kbd {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            letter-spacing: 0.04em;
+        }
+    </style>
 </head>
 <body>
     <div class="bg-grid"></div>
@@ -29,6 +118,7 @@
                 <li><a href="applications.html">Применение</a></li>
                 <li><a href="history.html">История</a></li>
                 <li><a href="safety.html" class="active">Безопасность</a></li>
+                <li><a href="interactive.html">Интерактив</a></li>
             </ul>
             <div class="burger" id="burger"><span></span><span></span><span></span></div>
         </div>
@@ -41,6 +131,28 @@
 
     <section class="section">
         <div class="container">
+
+            <div class="safety-grid">
+                <div class="embed-anim fade-in">
+                    <div class="embed-head">
+                        <h3>Поражение глаза лазером (интерактив)</h3>
+                        <span class="hint">Двигай мышь • Клик → импульс</span>
+                    </div>
+                    <canvas id="eyeHazardCanvas"></canvas>
+                </div>
+
+                <div class="glass-card safety-legend fade-in">
+                    <h4>Схема и зоны риска</h4>
+                    <div class="legend-row"><span class="dot blue"></span><span>Луч лазера (направление и фокусировка)</span></div>
+                    <div class="legend-row"><span class="dot orange"></span><span>Зона фокуса на сетчатке (макула/фовеа)</span></div>
+                    <div class="legend-row"><span class="dot red"></span><span>Импульсный «ожог» (тепловое повреждение)</span></div>
+
+                    <div class="callout">
+                        Видимый и ближний ИК диапазон (примерно 400–1400 нм) является наиболее критичным для сетчатки, так как оптическая система глаза фокусирует излучение на малой площади сетчатки.
+                        <div style="margin-top:0.8rem; color: rgba(255,255,255,0.72)">Подсказка: наведите луч на центр сетчатки, затем нажмите <span class="kbd">клик</span> для импульса.</div>
+                    </div>
+                </div>
+            </div>
 
             <article class="article-block glass-card fade-in">
                 <h2>Классификация лазеров по степени опасности</h2>
@@ -100,6 +212,7 @@
                     <a href="applications.html">Применение</a>
                     <a href="history.html">История</a>
                     <a href="safety.html">Безопасность</a>
+                    <a href="interactive.html">Интерактив</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -108,5 +221,6 @@
         </div>
     </footer>
     <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
 </body>
 </html>

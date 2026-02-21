@@ -16,7 +16,7 @@ class LaserBeamSimulator {
         this.isRunning = true;
 
         this.canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
-        this.canvas.addEventListener('touchmove', (e) => this.onTouchMove(e));
+        this.canvas.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
         this.canvas.addEventListener('click', () => this.emitBurst());
 
         this.animate();
@@ -435,7 +435,6 @@ class ResonatorAnim {
         this.height = canvas.height = 300;
         this.photonPackets = [];
         this.time = 0;
-        this.gain = 0.7;
         this.isRunning = true;
 
         // Mirrors
@@ -619,7 +618,6 @@ class EnergyLevelDiagram {
         this.isRunning = true;
         this.electrons = [];
         this.photonsEmitted = [];
-        this.mode = '4level'; // '3level' or '4level'
 
         // Energy levels
         this.levels = [
@@ -674,9 +672,9 @@ class EnergyLevelDiagram {
                                 e.transitioning = true;
                                 e.transProgress = 0;
                             }
-                        }, 300 + Math.random() * 500);
+                        }, 250 + Math.random() * 450);
                     } else if (e.level === 1) {
-                        // Stimulated/spontaneous emission to ground
+                        // Emission to ground
                         setTimeout(() => {
                             if (e.level === 1) {
                                 e.targetLevel = 0;
@@ -692,7 +690,7 @@ class EnergyLevelDiagram {
                                     phase: 0
                                 });
                             }
-                        }, 500 + Math.random() * 1500);
+                        }, 450 + Math.random() * 1200);
                     }
                 }
             }
@@ -713,7 +711,7 @@ class EnergyLevelDiagram {
         ctx.clearRect(0, 0, this.width, this.height);
 
         // Draw energy levels
-        this.levels.forEach((lvl, i) => {
+        this.levels.forEach((lvl) => {
             ctx.strokeStyle = lvl.color + '88';
             ctx.lineWidth = 2;
             ctx.setLineDash([8, 4]);
@@ -731,8 +729,6 @@ class EnergyLevelDiagram {
 
         // Draw transition arrows
         // Pump arrow
-        ctx.strokeStyle = '#ff448888';
-        ctx.lineWidth = 2;
         this.drawArrow(ctx, this.width - 60, this.levels[0].y, this.width - 60, this.levels[2].y, '#ff4488', 'Накачка ↑');
 
         // Non-radiative
@@ -743,10 +739,6 @@ class EnergyLevelDiagram {
         ctx.lineTo(this.width - 40, this.levels[1].y);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#ffffff66';
-        ctx.font = '10px Roboto, sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillText('Безызлучат.', this.width - 36, (this.levels[2].y + this.levels[1].y) / 2 + 4);
 
         // Laser transition
         this.drawArrow(ctx, this.width - 20, this.levels[1].y, this.width - 20, this.levels[0].y, '#00f0ff', 'Лазер ↓');
@@ -804,7 +796,7 @@ class EnergyLevelDiagram {
         ctx.fillText('Клик — накачка электронов на верхний уровень', 10, 20);
     }
 
-    drawArrow(ctx, x1, y1, x2, y2, color, label) {
+    drawArrow(ctx, x1, y1, x2, y2, color) {
         ctx.save();
         ctx.strokeStyle = color + '88';
         ctx.fillStyle = color + '88';
@@ -868,6 +860,257 @@ function initRotatingCards() {
     });
 }
 
+// ===== EYE HAZARD (Safety Page) =====
+class EyeHazardAnim {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.width = canvas.width = canvas.parentElement.clientWidth;
+        this.height = canvas.height = 420;
+        this.time = 0;
+        this.isRunning = true;
+        this.mx = this.width * 0.6;
+        this.my = this.height * 0.45;
+        this.burns = [];
+
+        this.canvas.addEventListener('mousemove', (e) => this.onMove(e));
+        this.canvas.addEventListener('touchmove', (e) => this.onTouch(e), { passive: false });
+        this.canvas.addEventListener('click', () => this.pulse());
+
+        this.animate();
+    }
+
+    onMove(e) {
+        const r = this.canvas.getBoundingClientRect();
+        this.mx = e.clientX - r.left;
+        this.my = e.clientY - r.top;
+    }
+
+    onTouch(e) {
+        e.preventDefault();
+        const r = this.canvas.getBoundingClientRect();
+        this.mx = e.touches[0].clientX - r.left;
+        this.my = e.touches[0].clientY - r.top;
+    }
+
+    pulse() {
+        const hit = this.getRetinaHitPoint();
+        this.burns.push({ x: hit.x, y: hit.y, life: 1, r: 6 + Math.random() * 6 });
+        // Add a little "shock" particles
+        for (let i = 0; i < 14; i++) {
+            this.burns.push({
+                x: hit.x + (Math.random() - 0.5) * 14,
+                y: hit.y + (Math.random() - 0.5) * 14,
+                life: 0.7,
+                r: 2 + Math.random() * 3,
+                spark: true,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2
+            });
+        }
+    }
+
+    getRetinaHitPoint() {
+        // Simple eye cross-section: retina on the right inner wall
+        const eyeCx = this.width * 0.55;
+        const eyeCy = this.height * 0.5;
+        const eyeRx = Math.min(this.width, 900) * 0.33;
+        const eyeRy = eyeRx * 0.6;
+        // Retina inner right boundary approximate
+        return { x: eyeCx + eyeRx * 0.78, y: eyeCy };
+    }
+
+    update() {
+        this.time += 0.016;
+        this.burns.forEach(b => {
+            b.life -= b.spark ? 0.02 : 0.01;
+            if (b.spark) {
+                b.x += b.vx;
+                b.y += b.vy;
+                b.vx *= 0.98;
+                b.vy *= 0.98;
+            }
+        });
+        this.burns = this.burns.filter(b => b.life > 0);
+    }
+
+    drawEye() {
+        const ctx = this.ctx;
+        const cx = this.width * 0.55;
+        const cy = this.height * 0.5;
+        const rx = Math.min(this.width, 900) * 0.33;
+        const ry = rx * 0.6;
+
+        // Sclera
+        const scl = ctx.createRadialGradient(cx - rx * 0.2, cy - ry * 0.2, 10, cx, cy, rx * 1.2);
+        scl.addColorStop(0, 'rgba(255,255,255,0.10)');
+        scl.addColorStop(0.6, 'rgba(255,255,255,0.05)');
+        scl.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = scl;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Lens
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.06)';
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.18)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(cx - rx * 0.45, cy, rx * 0.14, ry * 0.22, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Cornea (front bulge)
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(cx - rx * 0.82, cy, rx * 0.12, ry * 0.44, 0, -0.7, 0.7);
+        ctx.stroke();
+
+        // Retina band
+        ctx.strokeStyle = 'rgba(255, 136, 68, 0.35)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx * 0.96, ry * 0.84, 0, -0.55, 0.55);
+        ctx.stroke();
+
+        // Fovea (macula) spot
+        const foveaX = cx + rx * 0.78;
+        const foveaY = cy;
+        const fG = ctx.createRadialGradient(foveaX, foveaY, 0, foveaX, foveaY, 18);
+        fG.addColorStop(0, 'rgba(255,136,68,0.9)');
+        fG.addColorStop(0.6, 'rgba(255,136,68,0.25)');
+        fG.addColorStop(1, 'rgba(255,136,68,0)');
+        ctx.fillStyle = fG;
+        ctx.beginPath();
+        ctx.arc(foveaX, foveaY, 18 + Math.sin(this.time * 3) * 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Labels
+        ctx.fillStyle = 'rgba(255,255,255,0.65)';
+        ctx.font = '11px Orbitron, monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('Хрусталик', cx - rx * 0.65, cy - ry * 0.25);
+        ctx.fillText('Сетчатка', cx + rx * 0.45, cy - ry * 0.35);
+        ctx.fillText('Фовеа', foveaX + 10, foveaY - 8);
+    }
+
+    drawBeam() {
+        const ctx = this.ctx;
+        const entryX = this.width * 0.05;
+        const entryY = this.height * 0.5;
+        const cx = this.width * 0.55;
+        const cy = this.height * 0.5;
+        const rx = Math.min(this.width, 900) * 0.33;
+        const lensX = cx - rx * 0.45;
+        const lensY = cy;
+
+        // Map mouse to a focus target around retina
+        const target = this.getRetinaHitPoint();
+        const tX = target.x;
+        const tY = target.y + (this.my - cy) * 0.35; // slight vertical control
+
+        // Beam segments: entry -> lens -> retina
+        ctx.save();
+        ctx.globalAlpha = 0.85;
+        ctx.shadowColor = '#00f0ff';
+        ctx.shadowBlur = 20;
+
+        // Incoming
+        let grad1 = ctx.createLinearGradient(entryX, entryY, lensX, lensY);
+        grad1.addColorStop(0, 'rgba(0,240,255,0.0)');
+        grad1.addColorStop(0.2, 'rgba(0,240,255,0.7)');
+        grad1.addColorStop(1, 'rgba(0,240,255,0.25)');
+        ctx.strokeStyle = grad1;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(entryX, entryY);
+        ctx.lineTo(lensX, lensY);
+        ctx.stroke();
+
+        // Focused
+        let grad2 = ctx.createLinearGradient(lensX, lensY, tX, tY);
+        grad2.addColorStop(0, 'rgba(0,240,255,0.35)');
+        grad2.addColorStop(0.65, 'rgba(0,240,255,0.9)');
+        grad2.addColorStop(1, 'rgba(0,240,255,0)');
+        ctx.strokeStyle = grad2;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(lensX, lensY);
+        ctx.lineTo(tX, tY);
+        ctx.stroke();
+
+        // Focus glow
+        const fg = ctx.createRadialGradient(tX, tY, 0, tX, tY, 22);
+        fg.addColorStop(0, 'rgba(255,255,255,0.9)');
+        fg.addColorStop(0.3, 'rgba(0,240,255,0.85)');
+        fg.addColorStop(1, 'rgba(0,240,255,0)');
+        ctx.fillStyle = fg;
+        ctx.beginPath();
+        ctx.arc(tX, tY, 22 + Math.sin(this.time * 6) * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+
+        return { x: tX, y: tY };
+    }
+
+    drawBurns() {
+        const ctx = this.ctx;
+        this.burns.forEach(b => {
+            ctx.save();
+            ctx.globalAlpha = b.life;
+            const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r * 6);
+            g.addColorStop(0, b.spark ? 'rgba(255,255,255,0.9)' : 'rgba(255,45,117,0.9)');
+            g.addColorStop(0.35, 'rgba(255,45,117,0.55)');
+            g.addColorStop(1, 'rgba(255,45,117,0)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, b.r * 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        });
+    }
+
+    drawFrame() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.width, this.height);
+
+        // Subtle vignette
+        const vg = ctx.createRadialGradient(this.width / 2, this.height / 2, 50, this.width / 2, this.height / 2, Math.max(this.width, this.height));
+        vg.addColorStop(0, 'rgba(0,0,0,0)');
+        vg.addColorStop(1, 'rgba(0,0,0,0.35)');
+        ctx.fillStyle = vg;
+        ctx.fillRect(0, 0, this.width, this.height);
+
+        this.drawEye();
+        this.drawBeam();
+        this.drawBurns();
+
+        // Instructions
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.75)';
+        ctx.font = '12px Orbitron, monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('Мышь — управлять фокусом • Клик — импульс', 10, 20);
+    }
+
+    animate() {
+        if (!this.isRunning) return;
+        this.update();
+        this.drawFrame();
+        requestAnimationFrame(() => this.animate());
+    }
+
+    resize() {
+        this.width = this.canvas.width = this.canvas.parentElement.clientWidth;
+    }
+
+    destroy() { this.isRunning = false; }
+}
+
 // ===== INIT ALL ON PAGE LOAD =====
 let activeAnimations = [];
 
@@ -898,6 +1141,13 @@ function initAnimations() {
     if (elvlCanvas) {
         const elvl = new EnergyLevelDiagram(elvlCanvas);
         activeAnimations.push(elvl);
+    }
+
+    // Eye hazard
+    const eyeCanvas = document.getElementById('eyeHazardCanvas');
+    if (eyeCanvas) {
+        const eye = new EyeHazardAnim(eyeCanvas);
+        activeAnimations.push(eye);
     }
 
     // Rotating cards
