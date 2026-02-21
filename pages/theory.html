@@ -9,6 +9,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .embed-anim {
+            margin: 1.5rem 0 2.5rem;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-glass);
+        }
+        .embed-anim .embed-head {
+            padding: 1.2rem 1.5rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .embed-anim .embed-head h3 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        .embed-anim .hint {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            color: #00f0ff88;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .embed-anim canvas { display:block; width:100%; cursor: crosshair; }
+    </style>
 </head>
 <body>
     <div class="bg-grid"></div>
@@ -29,6 +59,7 @@
                 <li><a href="applications.html">Применение</a></li>
                 <li><a href="history.html">История</a></li>
                 <li><a href="safety.html">Безопасность</a></li>
+                <li><a href="interactive.html">Интерактив</a></li>
             </ul>
             <div class="burger" id="burger"><span></span><span></span><span></span></div>
         </div>
@@ -41,11 +72,28 @@
 
     <section class="section">
         <div class="container">
+
+            <div class="embed-anim fade-in">
+                <div class="embed-head">
+                    <h3>Вынужденное излучение (интерактив)</h3>
+                    <span class="hint">Клик → отправить фотон</span>
+                </div>
+                <canvas id="stimulatedEmissionCanvas"></canvas>
+            </div>
+
             <article class="article-block glass-card fade-in">
                 <h2>Вынужденное излучение</h2>
                 <p>В 1917 году Альберт Эйнштейн теоретически предсказал явление вынужденного (индуцированного) излучения, которое легло в основу работы всех лазеров. Суть явления заключается в следующем: фотон, взаимодействуя с возбуждённым атомом, может вызвать его переход в состояние с меньшей энергией с испусканием второго фотона, тождественного первому — той же частоты, фазы, поляризации и направления распространения.</p>
                 <p>Этот процесс принципиально отличается от спонтанного излучения, при котором возбуждённый атом излучает фотон самопроизвольно и в случайном направлении. Именно вынужденное излучение обеспечивает когерентность лазерного луча — все фотоны в нём «синхронизированы» между собой.</p>
             </article>
+
+            <div class="embed-anim fade-in">
+                <div class="embed-head">
+                    <h3>Энергетические уровни и накачка (интерактив)</h3>
+                    <span class="hint">Клик → накачка</span>
+                </div>
+                <canvas id="energyLevelCanvas"></canvas>
+            </div>
 
             <article class="article-block glass-card fade-in">
                 <h2>Инверсия населённостей</h2>
@@ -53,6 +101,14 @@
                 <p>Инверсия населённостей создаётся с помощью процесса, называемого «накачкой». Накачка — это подвод энергии к активной среде извне. Существуют различные способы накачки: оптическая (с помощью мощных ламп или другого лазера), электрическая (газовый разряд), химическая (за счёт экзотермических реакций), ядерная и другие.</p>
                 <p>Для эффективного создания инверсии обычно используются трёхуровневые или четырёхуровневые энергетические схемы. В трёхуровневой системе атомы возбуждаются на верхний уровень (уровень накачки), затем быстро безызлучательно переходят на метастабильный уровень, где накапливаются, создавая инверсию относительно основного уровня. В четырёхуровневой системе лазерный переход происходит между двумя промежуточными уровнями, что облегчает создание инверсии.</p>
             </article>
+
+            <div class="embed-anim fade-in">
+                <div class="embed-head">
+                    <h3>Оптический резонатор (интерактив)</h3>
+                    <span class="hint">Клик → добавить фотон</span>
+                </div>
+                <canvas id="resonatorCanvas"></canvas>
+            </div>
 
             <article class="article-block glass-card fade-in">
                 <h2>Оптический резонатор</h2>
@@ -102,6 +158,7 @@
                     <a href="applications.html">Применение</a>
                     <a href="history.html">История</a>
                     <a href="safety.html">Безопасность</a>
+                    <a href="interactive.html">Интерактив</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -110,5 +167,6 @@
         </div>
     </footer>
     <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
 </body>
 </html>
