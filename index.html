@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лазерные Технологии — Главная</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-grid"></div>
+    <div class="laser-beam laser-beam-1"></div>
+    <div class="laser-beam laser-beam-2"></div>
+    <div class="laser-beam laser-beam-3"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">◈</span>
+                <span class="logo-text">LASER<span class="accent">TECH</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="pages/theory.html">Теория</a></li>
+                <li><a href="pages/types.html">Типы лазеров</a></li>
+                <li><a href="pages/applications.html">Применение</a></li>
+                <li><a href="pages/history.html">История</a></li>
+                <li><a href="pages/safety.html">Безопасность</a></li>
+            </ul>
+            <div class="burger" id="burger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <h1 class="glitch" data-text="ЛАЗЕРНЫЕ ТЕХНОЛОГИИ">ЛАЗЕРНЫЕ ТЕХНОЛОГИИ</h1>
+            <p class="hero-subtitle typewriter">Свет, усиленный вынужденным излучением</p>
+            <div class="hero-stats">
+                <div class="stat-card glass-card">
+                    <span class="stat-number" data-count="1960">0</span>
+                    <span class="stat-label">Год создания первого лазера</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" data-count="5">0</span>
+                    <span class="stat-label">Основных типов лазеров</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" data-count="100">0</span><span class="stat-plus">+</span>
+                    <span class="stat-label">Областей применения</span>
+                </div>
+            </div>
+            <a href="pages/theory.html" class="cta-btn glow-btn">Изучить теорию <span class="arrow">→</span></a>
+        </div>
+        <div class="hero-visual">
+            <div class="laser-prism">
+                <div class="prism"></div>
+                <div class="beam-in"></div>
+                <div class="beam-out beam-red"></div>
+                <div class="beam-out beam-green"></div>
+                <div class="beam-out beam-blue"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">Что такое лазер?</h2>
+            <div class="content-grid">
+                <div class="glass-card info-card fade-in-left">
+                    <div class="card-icon">⟐</div>
+                    <h3>Определение</h3>
+                    <p>Лазер (англ. LASER — Light Amplification by Stimulated Emission of Radiation) — устройство, преобразующее энергию накачки в энергию когерентного, монохроматического, поляризованного и узконаправленного потока излучения. Термин «лазер» является аббревиатурой, означающей «усиление света посредством вынужденного излучения».</p>
+                </div>
+                <div class="glass-card info-card fade-in-right">
+                    <div class="card-icon">◎</div>
+                    <h3>Принцип действия</h3>
+                    <p>Физической основой работы лазера служит явление вынужденного (индуцированного) излучения. Суть явления состоит в том, что возбуждённый атом способен излучить фотон под действием другого фотона без его поглощения, если энергия последнего равняется разности энергий уровней атома до и после излучения.</p>
+                </div>
+                <div class="glass-card info-card fade-in-left">
+                    <div class="card-icon">◇</div>
+                    <h3>Свойства излучения</h3>
+                    <p>Лазерное излучение обладает рядом уникальных свойств: высокая степень монохроматичности, когерентность (пространственная и временная), малая расходимость луча и возможность фокусировки в пятно с размерами порядка длины волны. Эти свойства обусловлены самим механизмом вынужденного излучения.</p>
+                </div>
+                <div class="glass-card info-card fade-in-right">
+                    <div class="card-icon">⬡</div>
+                    <h3>Компоненты лазера</h3>
+                    <p>Любой лазер состоит из трёх основных компонентов: активной (рабочей) среды, системы накачки (источника энергии) и оптического резонатора. Активная среда определяет длину волны излучения, система накачки обеспечивает создание инверсии населённостей, а резонатор формирует обратную связь и направленность выходного луча.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Links Section -->
+    <section class="section section-dark">
+        <div class="container">
+            <h2 class="section-title">Разделы сайта</h2>
+            <div class="pages-grid">
+                <a href="pages/theory.html" class="page-card glass-card hover-lift">
+                    <div class="page-card-glow"></div>
+                    <h3>Теория</h3>
+                    <p>Физические основы лазерного излучения, квантовая механика, вынужденное излучение и инверсия населённостей.</p>
+                    <span class="card-link">Подробнее →</span>
+                </a>
+                <a href="pages/types.html" class="page-card glass-card hover-lift">
+                    <div class="page-card-glow"></div>
+                    <h3>Типы лазеров</h3>
+                    <p>Газовые, твердотельные, полупроводниковые, жидкостные и другие типы лазеров, их характеристики и особенности.</p>
+                    <span class="card-link">Подробнее →</span>
+                </a>
+                <a href="pages/applications.html" class="page-card glass-card hover-lift">
+                    <div class="page-card-glow"></div>
+                    <h3>Применение</h3>
+                    <p>Использование лазеров в промышленности, медицине, науке, связи, военном деле и повседневной жизни.</p>
+                    <span class="card-link">Подробнее →</span>
+                </a>
+                <a href="pages/history.html" class="page-card glass-card hover-lift">
+                    <div class="page-card-glow"></div>
+                    <h3>История</h3>
+                    <p>От теоретических предсказаний Эйнштейна до современных ультрамощных лазерных установок.</p>
+                    <span class="card-link">Подробнее →</span>
+                </a>
+                <a href="pages/safety.html" class="page-card glass-card hover-lift">
+                    <div class="page-card-glow"></div>
+                    <h3>Безопасность</h3>
+                    <p>Классификация лазеров по степени опасности, средства защиты и правила безопасной работы с лазерным оборудованием.</p>
+                    <span class="card-link">Подробнее →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">LASER<span class="accent">TECH</span></span>
+                    <p>Информационный ресурс о лазерных технологиях и их применении.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Навигация</h4>
+                    <a href="index.html">Главная</a>
+                    <a href="pages/theory.html">Теория</a>
+                    <a href="pages/types.html">Типы лазеров</a>
+                    <a href="pages/applications.html">Применение</a>
+                    <a href="pages/history.html">История</a>
+                    <a href="pages/safety.html">Безопасность</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 LaserTech. Лазерные технологии и их использование.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
