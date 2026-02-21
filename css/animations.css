@@ -86,15 +86,9 @@
 
 /* ===== PULSE RING ===== */
 @keyframes pulseRing {
-    0% {
-        box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 15px rgba(0, 240, 255, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(0, 240, 255, 0);
-    }
+    0% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 240, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0); }
 }
 
 .timeline-item::before {
@@ -114,36 +108,27 @@
 }
 
 /* ===== LASER PRISM VISUAL (HOME) ===== */
-.hero-visual {
-    display: none; /* Hidden on mobile, shown on large screens if desired */
+.hero-visual { display: none; }
+
+/* ===== MOBILE PERFORMANCE TWEAKS ===== */
+@media (max-width: 768px) {
+    /* Reduce expensive hover glow on touch devices */
+    .glass-card::before { display: none; }
+
+    /* Typewriter can cause layout thrash on small screens */
+    .typewriter {
+        animation: none;
+        max-width: none;
+        border-right: none;
+        white-space: normal;
+    }
+
+    /* Reduce pulsing timeline dots */
+    .timeline-item::before { animation: none; }
 }
 
-/* ===== SCROLL INDICATOR ===== */
-@keyframes scrollBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(10px); }
+@media (prefers-reduced-motion: reduce) {
+    .fade-in, .fade-in-left, .fade-in-right, .section { transition: none; transform: none; opacity: 1; }
+    .timeline-item::before { animation: none; }
+    .particle { animation: none; opacity: 0.2; }
 }
-
-/* ===== STAGGER DELAYS ===== */
-.content-grid .glass-card:nth-child(1) { transition-delay: 0.1s; }
-.content-grid .glass-card:nth-child(2) { transition-delay: 0.2s; }
-.content-grid .glass-card:nth-child(3) { transition-delay: 0.3s; }
-.content-grid .glass-card:nth-child(4) { transition-delay: 0.4s; }
-
-.pages-grid .glass-card:nth-child(1) { transition-delay: 0.1s; }
-.pages-grid .glass-card:nth-child(2) { transition-delay: 0.2s; }
-.pages-grid .glass-card:nth-child(3) { transition-delay: 0.3s; }
-.pages-grid .glass-card:nth-child(4) { transition-delay: 0.4s; }
-.pages-grid .glass-card:nth-child(5) { transition-delay: 0.5s; }
-
-.timeline-item:nth-child(1) { transition-delay: 0.05s; }
-.timeline-item:nth-child(2) { transition-delay: 0.1s; }
-.timeline-item:nth-child(3) { transition-delay: 0.15s; }
-.timeline-item:nth-child(4) { transition-delay: 0.2s; }
-.timeline-item:nth-child(5) { transition-delay: 0.25s; }
-.timeline-item:nth-child(6) { transition-delay: 0.3s; }
-.timeline-item:nth-child(7) { transition-delay: 0.35s; }
-.timeline-item:nth-child(8) { transition-delay: 0.4s; }
-.timeline-item:nth-child(9) { transition-delay: 0.45s; }
-.timeline-item:nth-child(10) { transition-delay: 0.5s; }
-.timeline-item:nth-child(11) { transition-delay: 0.55s; }
